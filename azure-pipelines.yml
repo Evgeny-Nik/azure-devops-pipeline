@@ -26,5 +26,5 @@ steps:
     artifactVersion="$new_version"
   displayName: 'Increment Version (Bash)'
 
-- publish: $(System.DefaultWorkingDirectory)/bin/Release/net8.0/HelloWorldApp.dll
+- publish: $(System.DefaultWorkingDirectory)/HelloWorldApp/bin/Release/net8.0/HelloWorldApp.dll
   artifact: helloworld
