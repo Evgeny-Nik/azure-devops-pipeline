@@ -1,5 +1,5 @@
 trigger:
-- main
+- master
 
 pool:
   vmImage: ubuntu-latest
@@ -14,8 +14,25 @@ steps:
 - checkout: self
   clean: true
 
-- script: dotnet pack -p Version=1.0.$(Build.BuildId)
+- task: SonarQubePrepare@5
+  inputs:
+    SonarQube: 'azure_devops_pipeline_connection'
+    scannerMode: 'MSBuild'
+    projectKey: 'azure_devops_pipeline_azure_devops_pipeline_e3de723d-f449-4bf0-8d67-0c1081f0e641'
+
+# Dotnet build task
+- script: dotnet build -p Version=1.0.$(Build.BuildId)
   displayName: 'build the artifact'
+
+# Run Code Analysis task
+- task: SonarQubeAnalyze@5
+  inputs:
+    jdkversion: 'JAVA_HOME'
+    
+# Publish Quality Gate Result task
+- task: SonarQubePublish@5
+  inputs:
+    pollingTimeoutSec: '300'
 
 - script: |
     major_version=${env:majorVersion}
@@ -26,5 +43,5 @@ steps:
     artifactVersion="$new_version"
   displayName: 'Increment Version (Bash)'
 
-- publish: $(System.DefaultWorkingDirectory)/bin/Debug/net8.0/ConsoleApp1.dll
+- publish: $(System.DefaultWorkingDirectory)/HelloWorldApp/bin/Release/net8.0/HelloWorldApp.dll
   artifact: helloworld
