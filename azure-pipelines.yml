@@ -20,7 +20,6 @@ steps:
     SonarQube: 'azure_devops_pipeline_connection'
     scannerMode: 'MSBuild'
     projectKey: 'azure_devops_pipeline_azure_devops_pipeline_e3de723d-f449-4bf0-8d67-0c1081f0e641'
-    projectName: 'azure_devops_pipeline'
 
 # Dotnet build task
 - script: dotnet build -p Version=1.0.$(Build.BuildId)
