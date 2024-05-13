@@ -14,14 +14,15 @@ steps:
 - checkout: self
   clean: true
 
+
 - task: SonarQubePrepare@5
   inputs:
-    SonarQube: 'azure_devops_pipeline_connection'
+    SonarQube: 'azure_devops_pipeline_connection_master'
     scannerMode: 'MSBuild'
-    projectKey: 'azure_devops_pipeline_azure_devops_pipeline_e3de723d-f449-4bf0-8d67-0c1081f0e641'
+    projectKey: 'azure_devops_pipeline_azure_devops_pipeline_a8ba4cd5-8197-48c3-bcce-45500f7bf955'
 
 # Dotnet build task
-- script: dotnet build -p Version=1.0.$(Build.BuildId)
+- script: dotnet pack -p Version=1.0.$(Build.BuildId)
   displayName: 'build the artifact'
 
 # Run Code Analysis task
