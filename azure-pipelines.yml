@@ -14,8 +14,27 @@ steps:
 - checkout: self
   clean: true
 
-- script: dotnet pack -p Version=1.0.$(Build.BuildId)
+
+- task: SonarQubePrepare@5
+  inputs:
+    SonarQube: 'azure_devops_pipeline_connection'
+    scannerMode: 'MSBuild'
+    projectKey: 'azure_devops_pipeline_azure_devops_pipeline_e3de723d-f449-4bf0-8d67-0c1081f0e641'
+    projectName: 'azure_devops_pipeline'
+
+# Dotnet build task
+- script: dotnet build -p Version=1.0.$(Build.BuildId)
   displayName: 'build the artifact'
+
+# Run Code Analysis task
+- task: SonarQubeAnalyze@5
+  inputs:
+    jdkversion: 'JAVA_HOME'
+    
+# Publish Quality Gate Result task
+- task: SonarQubePublish@5
+  inputs:
+    pollingTimeoutSec: '300'
 
 - script: |
     major_version=${env:majorVersion}
