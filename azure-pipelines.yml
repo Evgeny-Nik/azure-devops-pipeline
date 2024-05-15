@@ -10,6 +10,7 @@ variables:
   majorVersion: '1'
   minorVersion: '0'
   artifactVersion: ''
+  sourceBranch: 'master'
 
 steps:
 - checkout: self
@@ -50,3 +51,8 @@ steps:
 - script: dotnet nuget push --source "artifacts" --api-key az $(System.DefaultWorkingDirectory)/HelloWorldApp/bin/Release/HelloWorldApp.$(artifactVersion).nupkg
   displayName: 'publish NuGet Package'
 
+- task: artifactstagger@1
+  inputs:
+    EndpointType: 'integrated'
+    StageNameTag: false
+    CustomTags: '$(sourceBranch)_$(artifactVersion)'
