@@ -15,25 +15,25 @@ steps:
   clean: true
 
 
-- task: SonarQubePrepare@5
-  inputs:
-    SonarQube: 'azure_devops_pipeline_connection_master'
-    scannerMode: 'MSBuild'
-    projectKey: 'azure_devops_pipeline_azure_devops_pipeline_a8ba4cd5-8197-48c3-bcce-45500f7bf955'
+# - task: SonarQubePrepare@5
+  # inputs:
+    # SonarQube: 'azure_devops_pipeline_connection_master'
+    # scannerMode: 'MSBuild'
+    # projectKey: 'azure_devops_pipeline_azure_devops_pipeline_a8ba4cd5-8197-48c3-bcce-45500f7bf955'
 
 # Dotnet build task
 - script: dotnet build
   displayName: 'build the artifact'
 
-# Run Code Analysis task
-- task: SonarQubeAnalyze@5
-  inputs:
-    jdkversion: 'JAVA_HOME'
-
-# Publish Quality Gate Result task
-- task: SonarQubePublish@5
-  inputs:
-    pollingTimeoutSec: '300'
+# # Run Code Analysis task
+# - task: SonarQubeAnalyze@5
+  # inputs:
+    # jdkversion: 'JAVA_HOME'
+# 
+# # Publish Quality Gate Result task
+# - task: SonarQubePublish@5
+  # inputs:
+    # pollingTimeoutSec: '300'
 
 - script: |
     major_version=${env:majorVersion}
@@ -44,8 +44,8 @@ steps:
     artifactVersion="$new_version"
   displayName: 'Increment Version (Bash)'
 
-- script: dotnet pack -p Version=1.0.$(Build.BuildId)
+- script: dotnet pack -p Version==${env:new_version}
   displayName: 'Create NuGet Package'
 
-- script: dotnet nuget push --source "artifacts" --api-key az $(System.DefaultWorkingDirectory)/HelloWorldApp/bin/Release/HelloWorldApp1.1.0.$(Build.BuildId).nupkg
+- script: dotnet nuget push --source "artifacts" --api-key az $(System.DefaultWorkingDirectory)/HelloWorldApp/bin/Release/HelloWorldApp.${env:new_version}.nupkg
   displayName: 'publish NuGet Package'
