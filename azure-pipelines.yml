@@ -46,7 +46,7 @@ steps:
   displayName: 'Increment Version (Bash)'
   name: IncVer
 
-- script: echo Version number is $artifactVersion
+- script: echo "Version number is $(IncVer.artifactVersion)""
   displayName: 'Display version number'
   
 - script: |
