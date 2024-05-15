@@ -22,7 +22,7 @@ steps:
     projectKey: 'azure_devops_pipeline_azure_devops_pipeline_a8ba4cd5-8197-48c3-bcce-45500f7bf955'
 
 # Dotnet build task
-- script: dotnet pack -p Version=1.0.$(Build.BuildId)
+- script: dotnet build
   displayName: 'build the artifact'
 
 # Run Code Analysis task
@@ -44,5 +44,8 @@ steps:
     artifactVersion="$new_version"
   displayName: 'Increment Version (Bash)'
 
-- publish: $(System.DefaultWorkingDirectory)/HelloWorldApp/bin/Release/net8.0/HelloWorldApp.dll
-  artifact: helloworld
+- script: dotnet pack -p Version=1.0.$(Build.BuildId)
+  displayName: 'Create NuGet Package'
+
+- script: dotnet nuget push --source "hello_world" --api-key az $(System.DefaultWorkingDirectory)/bin/Release/HelloWorldApp1.1.0.$(Build.BuildId).nupkg
+  displayName: 'publish NuGet Package'
