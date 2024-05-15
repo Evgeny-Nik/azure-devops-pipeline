@@ -37,7 +37,10 @@ steps:
     # pollingTimeoutSec: '300'
 
 - script: |
-    new_version="${env:majorVersion}.${env:minorVersion}.$(Build.BuildNumber)"
+    major_version=${env:majorVersion}
+    minor_version=${env:minorVersion}
+    build_number=$(Build.BuildNumber)
+    new_version="$major_version.$minor_version.$build_number"
     echo "New artifact version: $new_version"
     echo "##vso[task.setvariable variable=artifactVersion;]$(new_version)"
   displayName: 'Increment Version (Bash)'
