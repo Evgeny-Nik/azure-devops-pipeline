@@ -46,8 +46,8 @@ steps:
 
 - script: |
     echo "$(artifactVersion)"
-    dotnet pack -p Version==${env:new_version}
+    dotnet pack -p Version=$(artifactVersion)
   displayName: 'Create NuGet Package'
 
-- script: dotnet nuget push --source "artifacts" --api-key az $(System.DefaultWorkingDirectory)/HelloWorldApp/bin/Release/HelloWorldApp.${env:new_version}.nupkg
+- script: dotnet nuget push --source "artifacts" --api-key az $(System.DefaultWorkingDirectory)/HelloWorldApp/bin/Release/HelloWorldApp.$(artifactVersion).nupkg
   displayName: 'publish NuGet Package'
