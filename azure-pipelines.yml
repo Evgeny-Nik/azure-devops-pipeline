@@ -27,6 +27,7 @@ steps:
 - script: dotnet build
   displayName: 'build the artifact'
 
+
 # # Run Code Analysis task
 # - task: SonarQubeAnalyze@5
   # inputs:
@@ -44,15 +45,17 @@ steps:
 
 - script: echo "Version number is $(artifactVersion)"
   displayName: 'Display version number'
-  
-- script: dotnet pack -p Version=$(artifactVersion)
-  displayName: 'Create NuGet Package'
-
-- script: dotnet nuget push --source "artifacts" --api-key az $(System.DefaultWorkingDirectory)/HelloWorldApp/bin/Release/HelloWorldApp.$(artifactVersion).nupkg
-  displayName: 'publish NuGet Package'
 
 - task: artifactstagger@1
   inputs:
     EndpointType: 'integrated'
     StageNameTag: false
     CustomTags: '$(sourceBranch)_$(artifactVersion)'
+
+- script: dotnet pack -p Version=$(artifactVersion)
+  displayName: 'Create NuGet Package'
+
+- script: dotnet nuget push --source "artifacts" --api-key az $(System.DefaultWorkingDirectory)/HelloWorldApp/bin/Release/HelloWorldApp.$(artifactVersion).nupkg
+  displayName: 'publish NuGet Package'
+
+
