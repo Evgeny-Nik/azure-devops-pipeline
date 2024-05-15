@@ -42,18 +42,18 @@ steps:
     build_number=$(Build.BuildNumber)
     new_version="$major_version.$minor_version.$build_number"
     echo "New artifact version: $new_version"
-    artifactVersion="$new_version"
+    echo "##vso[task.setvariable variable=artifactVersion;]$new_version"
   displayName: 'Increment Version (Bash)'
   name: IncVer
 
-- script: echo "Version number is $(IncVer.artifactVersion)"
+- script: echo "Version number is ${env:artifactVersion}"
   displayName: 'Display version number'
   
 - script: |
-    echo "$(IncVer.artifactVersion)"
-    dotnet pack -p Version=${artifactVersion}
+    echo "${env:artifactVersion}"
+    dotnet pack -p Version=${env:artifactVersion}
   displayName: 'Create NuGet Package'
 
-- script: dotnet nuget push --source "artifacts" --api-key az $(System.DefaultWorkingDirectory)/HelloWorldApp/bin/Release/HelloWorldApp.${artifactVersion}.nupkg
+- script: dotnet nuget push --source "artifacts" --api-key az $(System.DefaultWorkingDirectory)/HelloWorldApp/bin/Release/HelloWorldApp.${env:artifactVersion}.nupkg
   displayName: 'publish NuGet Package'
 
