@@ -46,14 +46,14 @@ steps:
   displayName: 'Increment Version (Bash)'
   name: IncVer
 
-- script: echo "Version number is ${env:artifactVersion}"
+- script: echo "Version number is $(artifactVersion)"
   displayName: 'Display version number'
   
 - script: |
-    echo "${env:artifactVersion}"
-    dotnet pack -p Version=${env:artifactVersion}
+    echo "$(artifactVersion)"
+    dotnet pack -p Version=$(artifactVersion)
   displayName: 'Create NuGet Package'
 
-- script: dotnet nuget push --source "artifacts" --api-key az $(System.DefaultWorkingDirectory)/HelloWorldApp/bin/Release/HelloWorldApp.${env:artifactVersion}.nupkg
+- script: dotnet nuget push --source "artifacts" --api-key az $(System.DefaultWorkingDirectory)/HelloWorldApp/bin/Release/HelloWorldApp.$(artifactVersion).nupkg
   displayName: 'publish NuGet Package'
 
