@@ -44,7 +44,9 @@ steps:
     artifactVersion="$new_version"
   displayName: 'Increment Version (Bash)'
 
-- script: dotnet pack -p Version==${env:new_version}
+- script: |
+    echo "$(artifactVersion)"
+    dotnet pack -p Version==${env:new_version}
   displayName: 'Create NuGet Package'
 
 - script: dotnet nuget push --source "artifacts" --api-key az $(System.DefaultWorkingDirectory)/HelloWorldApp/bin/Release/HelloWorldApp.${env:new_version}.nupkg
