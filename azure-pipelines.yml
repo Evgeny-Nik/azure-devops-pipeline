@@ -51,6 +51,7 @@ steps:
     EndpointType: 'integrated'
     StageNameTag: false
     CustomTags: '$(sourceBranch)_$(artifactVersion)'
+  displayName: 'tag the Buildid'
 
 - script: dotnet pack -p Version=$(artifactVersion)
   displayName: 'Create NuGet Package'
